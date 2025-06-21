@@ -71,9 +71,13 @@ async function getDeploymentSource(id) {
 }
 
 async function getDeploymentId(domain) {
-  const deployment = await getJSONFromAPI(`/v13/deployments/${domain}`);
+  let path = `/v13/deployments/${domain}`;
+  if (VERCEL_TEAM) path += `?teamId=${VERCEL_TEAM}`; // Added teamId support
+  const deployment = await getJSONFromAPI(path);
   return deployment.id;
 }
+
+
 
 async function downloadFile(deploymentId, fileId, destination) {
   let path = `/v7/deployments/${deploymentId}/files/${fileId}`;
